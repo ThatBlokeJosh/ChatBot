@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<head>
+  <title>ChatBot</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+</head>
+
+<body>
+  <h1>ChatBot</h1>
+  <div class="answer">
+      {% if result %}
+        <div class="result">{{ result }}</div>
+      {% endif %}
+  </div>
+  <form method="post">
+    <input type="text" name="answer" placeholder="Enter a message" required />
+    <input type="submit" value="Send" />
+  </form>
+</body>
