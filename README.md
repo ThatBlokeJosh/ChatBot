@@ -7,7 +7,7 @@ A simple python chat bot that uses flask and openai api, text model used is text
 ## Instalation
 
 
-
+**Add the your openai api key to the .env folder, get the key on the openai api website.**
 ```bash
 python -m venv venv
 . venv/bin/activate
