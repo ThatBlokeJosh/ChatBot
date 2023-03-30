@@ -22,15 +22,18 @@ def conversaton_handler(prompt):
 from flask import Flask, request, render_template
  
 app = Flask(__name__)
-openai.api_key = "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"
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+answers = []
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == "POST":
         data = request.form
         prompt = data['answer']
-        return render_template("index.html", result=conversaton_handler(prompt))
+        answers.append(conversaton_handler(prompt))
+        return render_template("index.html", result=answers[-1])
     return render_template('index.html', result=conversaton_handler("Welcome your the user"))
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
