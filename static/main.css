@@ -25,6 +25,10 @@ body {
   flex-direction: column;
   align-items: center;
   padding-top: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  margin: auto 0;
 }
 .icon {
   width: 34px;
@@ -33,11 +37,13 @@ h1 {
   font-size: 32px;
   font-weight: bold;
   color: #202123;
+  padding: 10px;
+  border-radius: 4px;
 }
 form {
   display: flex;
   flex-direction: row;
-  width: 50%px;
+  width: 90%;
 }
 input:focus {
   text-decoration: none;
@@ -49,7 +55,7 @@ input[type="text"] {
   border: 5px solid #10a37f;
   border-right: 0 solid white;
   border-radius: 4px 0px 0px 4px;
-  text-decorations: none;
+  width: 80%;
 }
 ::placeholder {
   color: #8e8ea0;
@@ -63,13 +69,17 @@ input[type="submit"] {
   border-radius: 0px 4px 4px 0;
   text-align: center;
   cursor: pointer;
+  width: 20%;
 }
 .result {
   font-weight: bold;
   margin: 40px;
+  text-align: center;
 }
 .answer {
   border: 5px solid #10a37f;
   border-radius: 4px;
   margin: 20px;
+  width: 90%;
+  height: 50%;
 }
