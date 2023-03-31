@@ -24,16 +24,18 @@ from flask import Flask, request, render_template
 app = Flask(__name__)
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-answers = []
+promptList = []
+answerList = []
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == "POST":
         data = request.form
         prompt = data['answer']
-        answers.append(conversaton_handler(prompt))
-        return render_template("index.html", result=answers[-1])
-    return render_template('index.html', result=conversaton_handler("Welcome your the user"))
-
+        promptList.append(f"User: {prompt}")
+        answerList.append(conversaton_handler(prompt))
+        return render_template("index.html", loop=len(promptList), answers=answerList, questions=promptList)
+    return render_template('index.html', result=conversaton_handler("Welcome the user to the chatbot app."))
+    
 if __name__ == '__main__':
     app.run(debug=True)
