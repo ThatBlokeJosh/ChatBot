@@ -41,7 +41,7 @@ def index():
 def guest(number):
     if request.method == "POST":
         index = userList.index(number)
-        if len(toRender[index][userList[index]]["prompts"]) == 5:
+        if len(toRender[index][userList[index]]["prompts"]) == 10:
             toRender[index][userList[index]]["prompts"].clear()
             toRender[index][userList[index]]["answers"].clear()
             
