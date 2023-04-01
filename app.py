@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, jsonify
+from flask import Flask, request, render_template, redirect, url_for
 import openai
 import os
 import random
@@ -31,9 +31,9 @@ toRender = []
 @app.route('/')
 def index():
     userList.append(random.randint(1, 100))
-    if userList[-1] in userList[:-1]:
-        userList[-1] = random.randint(1, 100)
     toRender.append({userList[-1]: {"prompts": [], "answers": []}})
+    if userList[-1]  in userList[:-1] and toRender[-1][userList[-1]]["prompts"] != []:
+        index()
     return redirect(url_for("guest", number = userList[-1]))
 
 
@@ -41,7 +41,7 @@ def index():
 def guest(number):
     if request.method == "POST":
         index = userList.index(number)
-        if len(toRender[index][userList[index]]["prompts"]) > 5:
+        if len(toRender[index][userList[index]]["prompts"]) == 5:
             toRender[index][userList[index]]["prompts"].clear()
             toRender[index][userList[index]]["answers"].clear()
             
@@ -51,9 +51,16 @@ def guest(number):
         toRender[index][userList[index]]["answers"].append(
             conversaton_handler(prompt))
         return render_template("index.html", loop=len(toRender[index][userList[index]]["answers"],), answers=toRender[index][userList[index]]["answers"], 
-                               questions=toRender[index][userList[index]]["prompts"])
+                               questions=toRender[index][userList[index]]["prompts"], index=userList[index])
     else:
         return render_template('index.html', result=" 🖥️ ChatBot: Hi, welcome to the ChatBot app by ThatBlokeJosh. How can I assist you today?")
+    
+@app.route('/guest/<int:number>/clear', methods=['GET', 'POST'])
+def clear(number):
+    index = userList.index(number)
+    toRender[index][userList[index]]["prompts"].clear()
+    toRender[index][userList[index]]["answers"].clear()
+    return redirect(url_for("guest", number = userList[-1]))
 
 
 if __name__ == '__main__':

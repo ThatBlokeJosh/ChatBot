@@ -38,6 +38,9 @@
       <ul clas="navbar">
         <li class="GitHub"><a href="https://github.com/ThatBlokeJosh">GitHub<a><li>
         <a href="https://github.com/ThatBlokeJosh/ChatBot">ChatBot<a>
+        {% if index %}
+          <li><a href={{url_for("clear", number=index)}}>Clear</a></li>
+        {%endif%}
       </ul>
     </nav>
   </main>
