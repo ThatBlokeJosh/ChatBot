@@ -5,31 +5,40 @@
 </head>
 
 <body>
-  <h1>ChatBot</h1>
-  {% if result %}
-    <div class="answers">
-      <div class="result">
-        <div class="answer">
-          <p>{{result}}</p>
+  <main>
+    <h1>ChatBot</h1>
+    {% if result %}
+      <div class="answers">
+        <div class="result">
+          <div class="answer">
+            <p>{{result}}</p>
+          </div>
         </div>
       </div>
-    </div>
-  {% else %}
-    <div class="answers">
-      <div class="result">
-        {% for answer in answers%}
-          <div class="answer">
-            <p>{{answer}}</p>
-          </div>
-          <div class="question">
-            <p>{{questions[loop.index-1]}}</p>
-          </div>
-        {% endfor %}
+    {% elif answers != [] or questions != [] %}
+      <div class="answers">
+        <div class="result">
+          {% for answer in answers%}
+            <div class="answer">
+              <p>{{answer}}</p>
+            </div>
+            <div class="question">
+              <p>{{questions[loop.index-1]}}</p>
+            </div>
+          {% endfor %}
+        </div>
       </div>
-    </div>
-  {% endif %}
-  <form method="post">
-    <input type="text" name="answer" placeholder="Enter a message..." required />
-    <input type="submit" value="Send" />
-  </form>
+    {% endif %}
+    <form method="post">
+      <input type="text" name="answer" placeholder="Enter a message..." required />
+      <input type="submit" value="Send" />
+    </form>
+  
+    <nav>
+      <ul clas="navbar">
+        <li class="GitHub"><a href="https://github.com/ThatBlokeJosh">GitHub<a><li>
+        <a href="https://github.com/ThatBlokeJosh/ChatBot">ChatBot<a>
+      </ul>
+    </nav>
+  </main>
 </body>

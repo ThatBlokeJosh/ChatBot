@@ -1,41 +1,60 @@
+from flask import Flask, request, render_template, redirect, url_for, jsonify
 import openai
 import os
+import random
 
-model_engine = "text-davinci-003"
+model_engine = "gpt-3.5-turbo-0301"
+
 
 def chat_query(prompt):
-    completions = openai.Completion.create(
-            engine=model_engine,
-            prompt=prompt,
-            max_tokens=2028,
-            n=1,
-            temperature=0.5,
+    completions = openai.ChatCompletion.create(
+        model=model_engine,
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=2048,
+        n=1,
+        temperature=0.5,
     )
 
-    message = completions.choices[0].text
+    message = completions.choices[0].message.content
     return message
 
 def conversaton_handler(prompt):
     response = chat_query(prompt)
-    return f"ChatBot: {response}\n"
+    return f" 🖥️ ChatBot: {response}\n"
 
-from flask import Flask, request, render_template
- 
 app = Flask(__name__)
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-promptList = []
-answerList = []
+userList = []
+toRender = []
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def index():
+    userList.append(random.randint(1, 100))
+    if userList[-1] in userList[:-1]:
+        userList[-1] = random.randint(1, 100)
+    toRender.append({userList[-1]: {"prompts": [], "answers": []}})
+    return redirect(url_for("guest", number = userList[-1]))
+
+
+@app.route('/guest/<int:number>', methods=['GET', 'POST'])
+def guest(number):
     if request.method == "POST":
+        index = userList.index(number)
+        if len(toRender[index][userList[index]]["prompts"]) > 5:
+            toRender[index][userList[index]]["prompts"].clear()
+            toRender[index][userList[index]]["answers"].clear()
+            
         data = request.form
         prompt = data['answer']
-        promptList.append(f"User: {prompt}")
-        answerList.append(conversaton_handler(prompt))
-        return render_template("index.html", loop=len(promptList), answers=answerList, questions=promptList)
-    return render_template('index.html', result=conversaton_handler("Welcome the user to the chatbot app."))
-    
+        toRender[index][userList[index]]["prompts"].append(f" 👨 User: {prompt}")
+        toRender[index][userList[index]]["answers"].append(
+            conversaton_handler(prompt))
+        return render_template("index.html", loop=len(toRender[index][userList[index]]["answers"],), answers=toRender[index][userList[index]]["answers"], 
+                               questions=toRender[index][userList[index]]["prompts"])
+    else:
+        return render_template('index.html', result=" 🖥️ ChatBot: Hi, welcome to the ChatBot app by ThatBlokeJosh. How can I assist you today?")
+
+
 if __name__ == '__main__':
     app.run(debug=True)
